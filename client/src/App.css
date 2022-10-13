@@ -1,0 +1,48 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.App {
+  min-height: 100vh;
+    display: flex;
+    text-align: start;
+    justify-content: center;
+    background-color: rgb(21, 21, 21);
+}
+.token-list {
+  margin: 200px auto 0px;
+  min-width: 900px;
+  border: 1.2px solid #ddd;
+}
+.title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1.2px solid #ddd;
+}
+.title * {
+  padding: 5px;
+  color: #ddd;
+}
+
+.filter-Cont {
+  width: 100%;
+  padding: 10px;
+}
+
+.filter-Cont>label {
+  width: 50%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 22px;
+  font-weight: 550;
+  color: white;
+}
+
+.filter-Cont>label>select {
+  padding: 7px;
+  font-size: 20px;
+}

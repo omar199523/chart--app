@@ -1,0 +1,30 @@
+{
+  "name": "mern-tutorial",
+  "version": "1.0.0",
+  "description": "this yottube tetural",
+  "main": "sarver.js",
+  "scripts": {
+    "client-install": "npm install --prefix client",
+    "start": "node server.js",
+    "server": "nodemon server.js",
+    "client": "npm start --prefix client",
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix client &&npm run build --prefix client"
+  },
+  "author": "omar199523",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^1.1.2",
+    "bcryptjs": "^2.4.3",
+    "colors": "^1.4.0",
+    "concurrently": "^7.4.0",
+    "dotenv": "^16.0.0",
+    "express": "^4.18.1",
+    "express-async-handler": "^1.2.0",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^6.3.2"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.20"
+  }
+}

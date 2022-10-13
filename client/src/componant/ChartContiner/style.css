@@ -1,0 +1,32 @@
+.list {
+    margin: 20px auto 0px;
+    position: relative;
+}
+
+.chart-con {
+    position: absolute;
+    top: -256px;
+    left: 150px;
+    width: 200px;
+        height: 250px;
+        padding: 5px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    border-radius: 20px;
+    border: 1.4px solid #eab308;
+        background-color: #1f2937;
+}
+
+.chart-con:before {
+    content: "";
+    position: absolute;
+    left: 30px;
+    top: 227px;
+    width: 0;
+    height: 0;
+    transform: rotate(58deg);
+    border-top: 20px solid transparent;
+    border-right: 10px solid #1f2937;
+    border-bottom: 21px solid transparent;
+}
