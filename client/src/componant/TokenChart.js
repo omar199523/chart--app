@@ -14,8 +14,7 @@ const GoogleChart =({id})=> {
   useEffect(() => {
     axios.get(`./api/tokens/chart/${id}`).then(res=>{
       const dexTrades =res.data.data;
-
-      const data = dexTrades.map((dexItem)=>{
+      const result = dexTrades.map((dexItem)=>{
         return [`${new Date(dexItem.timeInterval.minute).getHours()}:${new Date(dexItem.timeInterval.minute).getMinutes()}`,
         converNumber(dexItem.open),
         converNumber(dexItem.open),
@@ -23,13 +22,13 @@ const GoogleChart =({id})=> {
         converNumber(dexItem.close)
         ]
       })
-      setData(data)
+      setData(result)
     })
     .catch((error)=>{
         console.log(error);
       })
   }, [])
-  
+  console.log(data)
       return (
           <>
               {(data.length !== 0)?(<Chart

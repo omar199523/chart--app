@@ -8,12 +8,12 @@ const lastFiveMinDate = ()=>{
     let date = new Date();
     return `${date.getFullYear()}-${addLeadingZeros(date.getMonth()+1,2)}-${addLeadingZeros(date.getDate(),2)}T${addLeadingZeros(date.getHours(),2)}:${addLeadingZeros(date.getMinutes()-5,2)}:${addLeadingZeros(date.getSeconds(),2)}`;
 };
-const networkQuerys = (network)=>{
+const networkQuerys = (network,address)=>{
     return `query MyQuery {
       ethereum(network: ${network}) {
         dexTrades(
-          date: {since: "${lastFiveMinDate()}"}
-          options: {limit: 10,asc:"trades"}
+					baseCurrency:{is:"${address}"}
+          options: {limit: 1}
         ) {
           trades: count
           sellCurrency {
@@ -32,7 +32,7 @@ const tokenQuery = (token) => {
   return `{
     ethereum(network: ${token.network}) {
       dexTrades(
-        options: {asc: "timeInterval.minute", limit: 10}
+        options: {desc: "timeInterval.minute", limit: 10}
         baseCurrency: {is: "${token.address}"}
       ) {
         timeInterval {
@@ -58,6 +58,10 @@ const tokenQuery = (token) => {
     }
   }`;
 }
+const converNumber = (num)=>{
+  const result = Number(num)
+  return (result)
+} 
 
 const axiosDataFun = async (query) => {
   const config ={
@@ -73,33 +77,32 @@ const axiosDataFun = async (query) => {
       .then((response) => {
          return response
       })
-      // .catch((error)=> {
-      //   console.log(error);
-      // });
+      .catch((error)=> {
+        console.log("error");
+      });
 };
 
 
-
 const fetchData = async ()=>{
-  Tokens.deleteMany({},()=>{})
-  networks.map((network)=>{
-    const networkConfig = networkQuerys(network);
-    axiosDataFun(networkConfig).then(res=>{
-      const dexTrades = res.data.data.ethereum.dexTrades;
-        let result =dexTrades.map(token=>{
-          const {address,name,symbol} = token.sellCurrency;
-          const tokenFun = tokenQuery({address,network});
-          axiosDataFun(tokenFun).then(res=>{
-            let data=res.data.data.ethereum.dexTrades;
-            Tokens.create({
-              network,name,symbol,address,data,sellTradeCount:token.trades,timestamp:token.timeInterval.second
-            })
-          })
-        });
+  const tokensData = await Tokens.find();
+
+  tokensData.map(async(token)=>{
+    let query = tokenQuery(token);
+    let data = [] 
+    let status = "DEPLOYED";
+    await axiosDataFun(networkQuerys(token.network,token.address)).then(res=> {
+      if(res.data.data.ethereum.dexTrades.length >0 && res.data.data.ethereum.dexTrades[0].trades >0){
+        status = "LIVE"
+      }
     })
-    
+    await axiosDataFun(query).then((res)=>{
+      Tokens.findByIdAndUpdate(token._id,{data : res.data.data.ethereum.dexTrades ,status},{new:true})
+      .then(()=>{console.log("token is update")})
+      .catch(error=>{console.log("error")})
   })
+})
 }
+
 module.exports ={
   fetchData
 }

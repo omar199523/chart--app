@@ -16,8 +16,9 @@ function App() {
         setTokenDatas(res.data)
         
       })
-  },1*60*1000);
+  },60*1000);
   }, [])
+  console.log(tokenDatas)
   return(
     <div className="App">
       <div className='token-list'>
@@ -26,7 +27,7 @@ function App() {
           <h2 className='tilte-address'>Address</h2>
         </div>
         <div className='filter-Cont'>
-          <label froHtml="network">
+          <label htmlFor="network">
             network
             <select id="network" value={network} onChange ={(e)=>{setNetwork(e.target.value)}}>
               <option value="ethereum">ethereum</option>

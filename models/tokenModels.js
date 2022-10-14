@@ -17,9 +17,9 @@ const tokensSchema = mongoose.Schema({
         type:String,
         requiresd:[true,'Please add timestamp value']
     },
-    sellTradeCount:{
+    status:{
         type:String,
-        requiresd:[true,'Please add sellTradeCount value']
+        default:"DEPLOYED"
     },
     address:{
         type:String,
@@ -27,7 +27,7 @@ const tokensSchema = mongoose.Schema({
     },
     data:{
         type:Object,
-        requiresd:[true,'Please add data value']
+        default:[]
     }
 },{
     timestamps:true

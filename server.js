@@ -13,12 +13,9 @@ app.use('/api/tokens',require('./routes/tokenRoute'))
 
 const {fetchData} = require('./controller/queryFun')
 
-
 setInterval(()=>{
     fetchData()
-},1*60*1000)
-
-
+},60*1000)
 app.listen(port, () => {
     console.log(`sarver stared on port ${port}`)
     

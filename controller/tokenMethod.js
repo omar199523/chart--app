@@ -1,12 +1,13 @@
 const asyncHandler = require('express-async-handler');
-const Tokens = require('../models/tokenModels')
+const Tokens = require('../models/tokenModels.js')
 //@desc Get Token
 //@route GET /api/tokens
 //@access public
 const getTokens =asyncHandler(async (req,res)=>{
     const allToken =await Tokens.find()
     res.status(200).json(allToken);
-})
+}) 
+
 
 //@desc Get Token
 //@route GET /api/tokens
