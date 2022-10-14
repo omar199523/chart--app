@@ -1,5 +1,5 @@
-/* eslint-disable react-hooks/rules-of-hooks */
-import {useEffect, useState} from 'react'
+
+import { useState} from 'react'
 import TokenChart from "../TokenChart";
 import './style.css'
 const ChartContiner = ({tokenData}) => {
