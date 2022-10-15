@@ -2,14 +2,14 @@ const axios = require("axios");
 const networks = ["bsc", "ethereum"];
 const Tokens = require('../models/tokenModels')
 function addLeadingZeros(num, totalLength) {
-    return String(num).padStart(totalLength, '0');
+  return String(num).padStart(totalLength, '0');
 }
-const lastFiveMinDate = ()=>{
-    let date = new Date();
-    return `${date.getFullYear()}-${addLeadingZeros(date.getMonth()+1,2)}-${addLeadingZeros(date.getDate(),2)}T${addLeadingZeros(date.getHours(),2)}:${addLeadingZeros(date.getMinutes()-5,2)}:${addLeadingZeros(date.getSeconds(),2)}`;
+const lastFiveMinDate = () => {
+  let date = new Date();
+  return `${date.getFullYear()}-${addLeadingZeros(date.getMonth() + 1, 2)}-${addLeadingZeros(date.getDate(), 2)}T${addLeadingZeros(date.getHours(), 2)}:${addLeadingZeros(date.getMinutes() - 5, 2)}:${addLeadingZeros(date.getSeconds(), 2)}`;
 };
-const networkQuerys = (network,address)=>{
-    return `query MyQuery {
+const networkQuerys = (network, address) => {
+  return `query MyQuery {
       ethereum(network: ${network}) {
         dexTrades(
 					baseCurrency:{is:"${address}"}
@@ -58,52 +58,52 @@ const tokenQuery = (token) => {
     }
   }`;
 }
-const converNumber = (num)=>{
+const converNumber = (num) => {
   const result = Number(num)
   return (result)
-} 
+}
 
 const axiosDataFun = async (query) => {
-  const config ={
+  const config = {
     method: 'post',
     url: 'https://graphql.bitquery.io',
-    headers: { 
-      'Content-Type': 'application/json', 
-      'X-API-KEY': process.env.X-API-KEY
+    headers: {
+      'Content-Type': 'application/json',
+      'X-API-KEY': process.env.X_API_KEY
     },
-    data : {query}
-    };
-    return axios(config)
-      .then((response) => {
-         return response
-      })
-      .catch((error)=> {
-        console.log("error");
-      });
+    data: { query }
+  };
+  return axios(config)
+    .then((response) => {
+      return response
+    })
+    .catch((error) => {
+      console.log(error);
+    });
 };
 
 
-const fetchData = async ()=>{
+const fetchData = async () => {
   const tokensData = await Tokens.find();
 
-  tokensData.map(async(token)=>{
+  tokensData.map(async (token) => {
     let query = tokenQuery(token);
-    let data = [] 
+    let data = []
     let status = "DEPLOYED";
-    await axiosDataFun(networkQuerys(token.network,token.address)).then(res=> {
-      if(res.data.data.ethereum.dexTrades.length >0 && res.data.data.ethereum.dexTrades[0].trades >0){
+    await axiosDataFun(networkQuerys(token.network, token.address)).then(res => {
+      if (res.data.data.ethereum.dexTrades.length > 0 && res.data.data.ethereum.dexTrades[0].trades > 0) {
         status = "LIVE"
       }
     })
-    await axiosDataFun(query).then((res)=>{
-      Tokens.findByIdAndUpdate(token._id,{data : res.data.data.ethereum.dexTrades ,status},{new:true})
-      .then(()=>{console.log("token is update")})
-      .catch(error=>{console.log("error")})
+    await axiosDataFun(query).then((res) => {
+      Tokens.findByIdAndUpdate(token._id, { data: res.data.data.ethereum.dexTrades, status }, { new: true })
+        .then(() => { console.log("token is update") })
+        .catch(error => { console.log("error") })
+    })
   })
-})
 }
 
-module.exports ={
+module.exports = {
   fetchData
 }
 
