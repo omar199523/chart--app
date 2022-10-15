@@ -69,7 +69,7 @@ const axiosDataFun = async (query) => {
     url: 'https://graphql.bitquery.io',
     headers: { 
       'Content-Type': 'application/json', 
-      'X-API-KEY': 'BQYh5IhPL57WRiNvTavzEpHM3RKhX6VZ'
+      'X-API-KEY': process.env.X-API-KEY
     },
     data : {query}
     };

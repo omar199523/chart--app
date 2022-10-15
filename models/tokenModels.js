@@ -14,8 +14,7 @@ const tokensSchema = mongoose.Schema({
         requiresd:[true,'Please add symbol value']
     },
     timestamp:{
-        type:String,
-        requiresd:[true,'Please add timestamp value']
+        type:String
     },
     status:{
         type:String,
